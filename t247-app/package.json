@@ -4,12 +4,11 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "start": "node server.js",
+    "start": "ng serve",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
     "pree2e": "webdriver-manager update",
-    "e2e": "protractor",
-    "postinstall": "ng build --aot --prod"
+    "e2e": "protractor"
   },
   "private": true,
   "dependencies": {
@@ -38,8 +37,8 @@
   },
   "devDependencies": {
     "@angular/compiler-cli": "^4.0.0",
-    "typescript": "^2.0.0",
-    "@types/socket.io-client": "^1.4.32"
+    "@types/socket.io-client": "^1.4.32",
+    "typescript": "^2.3.4"
   },
   "engines": {
     "node": "8.11.2",
