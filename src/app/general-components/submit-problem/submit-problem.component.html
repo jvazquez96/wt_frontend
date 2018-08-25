@@ -1,0 +1,172 @@
+<!-- <app-site-navbar [showDropdown]="true" [currentRole]="'student'"></app-site-navbar> -->
+
+<div class="submit-code__component">
+    <div class="container-fluid">
+
+        <!-- <div class="submit-code__feedback-card">
+            <feedback-card #feedbackCard></feedback-card>
+        </div> -->
+        <div class="row">
+            <div class="col-md-6 ">
+                <div class="card card-block card-shadow">
+                    <h2 class="block__title">{{descriptionTitle}}</h2>
+                    <div class="">
+                        <div class="">
+                            <button type="button" class="btn btn-primary btn-lg choose-problem-btn"
+                            (click)="chooseProblem()" [disabled]="chosen">Choose
+                            </button>
+                            <button *ngIf="chosen" type="button" class="btn btn-danger btn-lg choose-problem-btn"
+                            (click)="eraseChoosing()">Remove
+                            </button>
+                            <p class="chosen">
+                                Chosen by: {{ chosenBy.first_name + " " + chosenBy.last_name + " " + chosenBy.enrollment }}
+                            </p>
+                        </div>
+                            
+                        <tabs-static (tabSelected)="assignActiveTab($event);">
+                            <tab-static tabTitle="English">
+                                <h4><b>Description:</b></h4>
+                                <div #descriptionEnglish></div>
+                                <span *ngFor="let case of testCases">
+                                    <h4><b>Sample Input:</b></h4>
+                                    <pre class="white-space">{{case.input}}</pre>
+                                    <h4><b>Sample Output:</b></h4>
+                                    <pre class="white-space">{{case.output}}</pre>
+                                </span>
+
+                            </tab-static>
+                            <tab-static tabTitle="Español">
+                                <h4><b>Description:</b></h4>
+                                <div #descriptionSpanish></div>
+                                <span *ngFor="let case of testCases">
+                                    <h4><b>Sample Input:</b></h4>
+                                    <pre class="white-space">{{case.input}}</pre>
+                                    <h4><b>Sample Output:</b></h4>
+                                    <pre class="white-space">{{case.output}}</pre>
+                                </span>
+                            </tab-static>
+                        </tabs-static>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 ">
+                <div class="card card-block card-shadow">
+                    <h2 class="block__title">Problem Submission</h2>
+                    <tabs-static #tabsVariable (notify)="onNotify($event)">
+                        <tab-static tabTitle="New Attempt">
+                            <div class="new-attempt">
+                                <div class="dropdown-position">
+                                    <!-- Languages -->
+                                    <div *ngIf="signaturePresent == ''" class="row margin-top10">
+                                        <div class="input-group col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                            <select class="form-control select-prog-lang" id="selectorLanguages"
+                                                    #selectedLanguage>
+                                                <option *ngFor="let lang of supportedLanguages"
+                                                        [value]="lang.value">
+                                                    {{lang.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="signaturePresent != ''">
+                                        <span class="prog-label label label-primary">{{languageName}}</span>
+                                    </div>
+                                </div>
+                                <code-editor #codeEditor [setSourceCode]=""></code-editor>
+                                <button type="button" class="btn btn-success btn-lg submit-code-btn"
+                                        [disabled]="(type == 0 && !submitParent)"
+                                        (click)="codeToSubmitReceived()">Submit
+                                </button>
+                               
+                            </div>
+                        </tab-static>
+                        <!-- <tab-static *ngFor="let entry of attempts; let myIndex = index"
+                                    tabTitle="Attempt {{entry.no_of_attempt}}" active={{entry.active}}> -->
+                        <tab-static *ngFor="let entry of attempts; let myIndex = index;"
+                                    tabTitle="Attempt {{attempts.length - myIndex}}" active={{entry.active}}>
+                            <div *ngIf="entry.state == 'SubmissionState.evaluated'">
+                                <p *ngIf="entry.grade == 100" class="attempt-content__title block__title"><span class="label label-success"><b>Grade:</b>
+                                    {{entry.grade}}%</span></p>
+                                <p *ngIf="entry.grade != 100" class="attempt-content__title block__title"><span class="label label-warning"><b>Grade:</b>
+                                    {{entry.grade}}%</span></p>
+                                <p class="attempt-content__subtitle ">Programming Language:
+                                    <span class="label label-primary">{{entry.language?entry.language:"error"}}</span>
+                                </p> <br/>
+                                <div *ngIf="entry.grade != 100">
+                                    <div *ngFor="let fb of entry.feedback_list; let feedbackIndex = index" class="card-shadow">
+                                        <p class="attempt-content__subtitle">Feedback {{feedbackIndex + 1}}:</p>
+                                        <pre> {{fb.feedback?fb.feedback:"error"}}</pre>
+                                        <p class="attempt-content__status">Status: <span class="label label-danger">{{fb.status?fb.status:"error"}}</span>
+                                        </p>
+                                    </div>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div *ngIf="entry.state == 'SubmissionState.pending'">
+                                <p *ngIf="entry.grade != 100" class="attempt-content__title block__title"><span class="label label-warning"><b>Grade:</b>
+                                    Pending</span></p>
+                                <p class="attempt-content__subtitle ">Programming Language:
+                                    <span class="label label-primary">{{entry.language?entry.language:"error"}}</span>
+                                </p> <br/>
+                                <div class="alert alert-success" role="alert"><h4 class="block__title">Problem is being
+                                    evaluated, please refresh the site.</h4></div>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-primary btn-lg reload" id="btn-update" (click)='reload(myIndex)'>
+                                        Update
+                                    </button>
+                                </div>
+                            </div>
+                            <div *ngIf="entry.state == 'SubmissionState.compilation_error'">
+                                <p *ngIf="entry.grade != 100" class="attempt-content__title block__title"><span class="label label-warning"><b>Grade:</b>
+                                    {{entry.grade}}%</span></p>
+                                <p class="attempt-content__subtitle ">Programming Language:
+                                    <span class="label label-primary">{{entry.language?entry.language:"error"}}</span>
+                                </p> <br/>
+                                <div class="alert alert-danger" role="alert"><h4 class="block__title">Compilation
+                                    error</h4></div>
+                            </div>
+                            <div *ngIf="entry.state == 'SubmissionState.internal_server_error'">
+                                <p *ngIf="entry.grade != 100" class="attempt-content__title block__title"><span class="label label-warning"><b>Grade:</b>
+                                    {{entry.grade}}%</span></p>
+                                <p class="attempt-content__subtitle ">Programming Language:
+                                    <span class="label label-primary">{{entry.language?entry.language:"error"}}</span>
+                                </p> <br/>
+                                <div class="alert alert-warning" role="alert"><h4 class="block__title">Internal Server
+                                    Error. Please report to Admin</h4></div>
+                            </div>
+                            <div *ngIf="entry.state != 'SubmissionState.pending'" class="text-center">
+                                <button type="button" class="btn btn-primary btn-lg" 
+                                    data-toggle="modal"
+                                    data-target="#myModal" (click)='loadCode()'>
+                                    See Attempt
+                                </button>
+                            </div>
+                        </tab-static>
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                             aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title">Attempted Code</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <pre><code class="code-attempt">{{codeFromAttempt}}</code></pre>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tabs-static>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

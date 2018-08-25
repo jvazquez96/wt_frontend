@@ -1,0 +1,21 @@
+.chart {
+    display: block; 
+    width: 100%;
+}
+
+.singleButton {
+    width: 250px;
+}
+
+.container{
+    margin-bottom: 10px;
+}
+
+.inputButton{
+    display: block;
+    width: 300px;
+}
+
+.inputText{
+    text-align: center;
+}

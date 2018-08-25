@@ -1,0 +1,68 @@
+<div class="container">
+    <div class="row">
+        <!-- <div class="form-group"> -->
+        <feedback-card #feedbackCard></feedback-card>
+        <div class = "container">
+            <div class="row">
+                <div class="col-md-3">
+                    <button role="button" class="btn btn-primary singleButton" (click)="getAllGroups()">
+                        Statistics of all groups
+                    </button>
+                </div>
+                <div class="col-md-3 ">
+                    <button class="btn btn-primary singleButton" role="button" (click)="getTopicStats()">
+                        All Topics
+                    </button>
+                </div>
+                <div class="col-md-3 ">
+                    <button class="btn btn-primary singleButton" role="button" (click)="getProblemsPerTopic()">
+                        Problems per topic
+                    </button>
+                </div>
+                <div class="col-md-3 ">
+                    <button class="btn btn-primary singleButton" role="button" (click)="getUsersPerCategory()">
+                        Users per category
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class = "container">
+            <div class="row">
+                <select [(ngModel)]="groupSelected" name="stats_groups" id="stats_groups">
+                    <option *ngFor="let group of groups" [value]="group.id">
+                        {{ 'Group ' + group.id + ' ' + group.course.name + ' ' + group.period }}
+                    </option>
+                </select>
+                <button class="btn btn-primary" role="button" (click)="getGroupStats()">
+                    Get Single Group Stats
+                </button>
+            </div>
+        </div>
+
+        <div class = "container">
+            <div class="row">
+                <select [(ngModel)]="problemSelected" name="stats_problems" id="stats_problems">
+                    <option *ngFor="let problem of problems" [value]="problem.id">
+                        {{ problem.name }}
+                    </option>
+                </select>
+                <button class="btn btn-primary" role="button" (click)="getProblemStats()">
+                    Accepted vs Wrong answers of a problem
+                </button>    
+            </div>
+        </div>
+      <!-- </div> -->
+    </div>
+    <div class="row">
+        <div *ngIf="displayChart" style="display: block">
+            <canvas #myChart baseChart
+                [datasets]="chartDataSet"
+                [labels]="chartLabels"
+                [chartType]="chartType"
+                [options]="chartOptions">
+            </canvas>
+        </div>
+    </div>
+</div>
+

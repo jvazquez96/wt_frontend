@@ -1,0 +1,261 @@
+<div class="container">
+
+    <h1>{{typeOfTableName.charAt(0).toUpperCase() + typeOfTableName.slice(1)}}</h1>
+
+
+    <generic-form *ngIf="coursesBool" [typeForm]="'courses'" (formChange)="renderTable();"></generic-form>
+    <generic-form *ngIf="topicsBool" [typeForm]="'topics'" (formChange)="renderTable();"></generic-form>
+    <generic-form *ngIf="groupsBool" [typeForm]="'groups'" (formChange)="renderTable();"></generic-form>
+    <generic-form *ngIf="usersBool" [typeForm]="'users'" (formChange)="renderTable();"></generic-form>
+    <div *ngIf="problemsBool" class="row">
+        <!-- <a (click)="createNewProblem()" class="btn btn-primary btn-new pull-right"> Create Problem</a> -->
+        <a (click)="createNewTeamProblem()" class="btn btn-primary btn-new pull-right"> Create Team Problem</a>
+    </div>
+    
+    <div class="search-bar">
+        <div class="custom-search-input">
+            <div class="input-group col-md-12">
+                <input type="text" class="form-control input-lg" placeholder="Search" #filterInput (keyup)="0"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="button">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Renderea los botones para filtrar y ordenar dependiendo de la flag que se activa al cambiar de tab-->
+    <div class="row">
+        <div *ngIf="usersBool">
+            Roles:
+            <button (click)="toggleFilterTag('student')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                Student
+            </button>
+            <button (click)="toggleFilterTag('professor')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                Professor
+            </button>
+            <button (click)="toggleFilterTag('admin')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                Admin
+            </button>
+            <br>
+        </div>
+        <div *ngIf="problemsBool">
+            Filtered By:
+            <button (click)="toggleFilterTagP('0')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                Easy
+            </button>
+            <button (click)="toggleFilterTagP('1')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                Medium
+            </button>
+            <button (click)="toggleFilterTagP('2')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                Hard
+            </button>
+            <button (click)="toggleFilterTagP('3')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                Status  <span *ngIf="'true' == filterTagProblem" octicon="check" width="15"></span>
+                        <span *ngIf="'false' == filterTagProblem" octicon="x" width="15"></span>
+            </button>
+        </div>
+        <br>
+        <div *ngIf="usersBool">
+            OrderBy:
+            <button (click)="toggleOrderByTag('Enrollment')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                Enrollment <span *ngIf="'EnrollmentDes' == OrderbyTagUser" octicon="chevron-down" width="15"></span>
+                           <span *ngIf="'EnrollmentAscen' == OrderbyTagUser" octicon="chevron-up" width="15"></span>
+            </button>
+            <button (click)="toggleOrderByTag('FirstName')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                First Name <span *ngIf="'FirstNameDes' == OrderbyTagUser" octicon="chevron-down" width="15"></span>
+                           <span *ngIf="'FirstNameAscen' == OrderbyTagUser" octicon="chevron-up" width="15"></span>
+            </button>
+            <button (click)="toggleOrderByTag('LastName')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                Last Name <span *ngIf="'LastNameDes' == OrderbyTagUser" octicon="chevron-down" width="15"></span>
+                          <span *ngIf="'LastNameAscen' == OrderbyTagUser" octicon="chevron-up" width="15"></span>
+            </button>
+        </div>
+        <div *ngIf="problemsBool">
+                OrderBy:
+                <button (click)="toggleOrderByTagP('Title')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                    Title <span *ngIf="'TitleDes' == OrderbyTagProblem" octicon="chevron-down" width="15"></span>
+                          <span *ngIf="'TitleAscen' == OrderbyTagProblem" octicon="chevron-up" width="15"></span>
+                </button>
+                <button (click)="toggleOrderByTagP('Topic')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                    Topic <span *ngIf="'TopicDes' == OrderbyTagProblem" octicon="chevron-down" width="15"></span>
+                          <span *ngIf="'TopicAscen' == OrderbyTagProblem" octicon="chevron-up" width="15"></span>
+                </button>
+                <button (click)="toggleOrderByTagP('Status')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                    Status <span *ngIf="'StatusDes' == OrderbyTagProblem" octicon="chevron-down" width="15"></span>
+                           <span *ngIf="'StatusAscen' == OrderbyTagProblem" octicon="chevron-up" width="15"></span>
+                </button>
+                <button (click)="toggleOrderByTagP('Difficulty')" type="button" class="btn btn-primary btn-round-sm btn-sm">
+                    Difficulty <span *ngIf="'DifficultyDes' == OrderbyTagProblem" octicon="chevron-down" width="15"></span>
+                               <span *ngIf="'DifficultyAscen' == OrderbyTagProblem" octicon="chevron-up" width="15"></span>
+                </button>
+            </div>
+        <br>
+    </div>
+    <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th *ngFor="let colName of columns">{{colName}}</th>
+        </tr>
+        </thead>
+        <tbody *ngIf="problemsBool">
+        <tr *ngFor="let entry of (content | sortProblem:OrderbyTagProblem)| filterProblems:filterTagProblem:true|filterProblems: filterInput.value:false">
+            <td>{{entry.value.name}}</td>
+            <td *ngIf=" entry.value.difficulty == 0">Easy</td>
+            <td *ngIf=" entry.value.difficulty == 1">Medium</td>
+            <td *ngIf=" entry.value.difficulty == 2">Hard</td>
+            <td>{{entry.value.topic}}</td>
+            <td>
+            <span *ngIf=" entry.value.can_edit == true">
+                <button *ngIf=" entry.value.active == true" class="btn btn-success"
+                        (click)="onChangeStatus(entry.value)">{{entry.value.active}}</button>
+                <button *ngIf=" entry.value.active == false" class="btn btn-danger"
+                        (click)="onChangeStatus(entry.value)">{{entry.value.active}}</button>
+            </span>
+            <span *ngIf=" entry.value.can_edit == false">
+                 <span *ngIf=" entry.value.active == true" class="label label-success">{{entry.value.active}}</span>
+                <span *ngIf=" entry.value.active == false" class="label label-danger">{{entry.value.active}}</span>
+            </span>
+
+            </td>
+            <td>
+                <button class="btn btn-primary" (click)="onSelectProblem(entry.value)">Show</button>
+            </td>
+            <td>
+                <a *ngIf=" entry.value.can_edit == true" class="btn btn-default btn-danger"
+                   (click)="onDeleteProblem(entry.value)" role="button">Delete</a>
+                <a *ngIf=" entry.value.can_edit == false">-</a>
+            </td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="problemsByTopicBool">
+        <tr *ngFor="let entry of (content | sort) | filterProblems: filterInput.value">
+            <td>{{entry.value.name}}</td>
+            <td *ngIf=" entry.value.difficulty == 0">Easy</td>
+            <td *ngIf=" entry.value.difficulty == 1">Medium</td>
+            <td *ngIf=" entry.value.difficulty == 2">Hard</td>
+            <td *ngIf=" entry.value.status == 'not_attempted'" class="notattempt"><span class="label label-primary">Not attempted</span>
+            </td>
+            <td *ngIf=" entry.value.status == 'accepted'"><span class="label label-success">Accepted</span></td>
+            <td *ngIf=" entry.value.status == 'wrong_answer'"><span class="label label-danger">Wrong Answer</span></td>
+            <td><a class="btn btn-success" (click)="onSelectAssignment(entry.value)" role="button">Solve</a></td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="assignmentsBool">
+        <tr *ngFor="let entry of (content | sort) | filterAssignments: filterInput.value ">
+            <td><a class="btn btn-success" (click)="onSelectAssignment(entry.value)" role="button">Solve</a></td>
+            <td>{{entry.value.title}}</td>
+            <td>{{entry.value.problem_name}}</td>
+            <td>{{entry.value.course_name}}</td>
+            <td *ngIf=" entry.value.difficulty == 0">Easy</td>
+            <td *ngIf=" entry.value.difficulty == 1">Medium</td>
+            <td *ngIf=" entry.value.difficulty == 2">Hard</td>
+            <td><span class="label label-primary">{{entry.value.due_date}}</span></td>
+            <td *ngIf="entry.value.grade == 100"><span class="label label-success">Yeah</span></td>
+            <td *ngIf="entry.value.grade != 100"><span class="label label-danger">Nop</span></td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="submissionsBool">
+        <tr *ngFor="let entry of (content | sort) | filterSubmissions: filterInput.value">
+            <td>{{entry.value.name}}</td>
+            <td><span class="label label-info">{{entry.value.no_of_attempts}}</span></td>
+            <td *ngIf="entry.value.max_grade == 100"><span class="label label-success">Yeah</span></td>
+            <td *ngIf="entry.value.max_grade != 100"><span class="label label-danger">Nop</span></td>
+
+        </tr>
+        <tbody *ngIf="assignmentSubmissionsBool">
+        <tr *ngFor="let entry of (content | sort)  | filterAssignmentSubmissions: filterInput.value">
+            <td>{{entry.value.student_name}}</td>
+            <td>{{entry.value.enrollment}}</td>
+            <td>{{entry.value.date || "-"}}</td>
+            <td *ngIf="entry.value.no_of_attempts!=0">
+                <button class="btn btn-primary" (click)="showProblemSubmissionsOfStudent(entry.value.student_id)">
+                    {{entry.value.no_of_attempts}}
+                </button>
+            </td>
+            <td *ngIf="entry.value.no_of_attempts==0">
+                <button class="btn btn-primary" (click)="zeroAttempts()">
+                    {{entry.value.no_of_attempts}}
+                </button>
+            </td>
+            <td><b>{{entry.value.grade || "0"}}</b></td>
+            <td *ngIf="entry.value.grade == 100"><span class="label label-success">Solved</span></td>
+            <td *ngIf="entry.value.grade != 100 && entry.value.no_of_attempts != 0"><span class="label label-danger">Not solved</span></td>
+            <td *ngIf="entry.value.grade != 100 && entry.value.no_of_attempts == 0"><span class="label label-info">Not attempted</span></td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="groupsBool">
+        <tr *ngFor="let entry of (content | sort) | filterGroups: filterInput.value">
+            <td>{{entry.value.course.name}}</td>
+            <td>{{entry.value.period}}</td>
+            <td><a class="btn btn-primary" (click)="onSelectGroup(entry.value)" role="button">Show</a></td>
+            <td><a class="btn btn-danger" (click)="onDeleteGroup(entry.value)" role="button">Delete</a></td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="usersBool">
+        <tr *ngFor="let entry of (content | sort:OrderbyTagUser) | filterUsers: filterTagUser: true | filterUsers: filterInput.value: false">
+            <td>{{entry.value.enrollment}}</td>
+            <td>{{entry.value.first_name}}</td>
+            <td>{{entry.value.last_name}}</td>
+            <td>{{entry.value.role}}</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#userEdit" (click)="onSelectUser(entry.value)">Edit
+                </button>
+            </td>
+            <td><a class="btn  btn-danger" (click)="onDeleteUser(entry.value)" role="button">Delete</a></td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="coursesBool">
+        <tr *ngFor="let entry of (content | sort) | filterCourses: filterInput.value">
+            <td>{{entry.value.name}}</td>
+            <td><a class="btn btn-primary" data-toggle="modal"
+                   data-target="#courseEdit" (click)="onSelectCourse(entry.value)" role="button">Edit</a></td>
+            <td><a class="btn btn-danger" (click)="onDeleteCourse(entry.value)" role="button">Delete</a></td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="topicsBool">
+        <tr *ngFor="let entry of (content | sort) | filterTopics: filterInput.value">
+            <td>{{entry.value.name}}</td>
+            <td><a class="btn btn-primary" data-toggle="modal"
+                   data-target="#topicEdit" (click)="onSelectTopic(entry.value)" role="button">Edit</a></td>
+            <td><a class="btn btn-danger" (click)="onDeleteTopic(entry.value)" role="button">Delete</a></td>
+        </tr>
+        </tbody>
+        <tbody *ngIf="teamsBool">
+            <tr *ngFor="let entry of content">
+                <td>{{entry.name}}</td>
+                <td>
+                    <span *ngFor="let student of entry.students; let j = index">
+                        {{ (j == entry.students.length - 1) ? student.first_name + " " + student.last_name : student.first_name + " " + student.last_name + " - " }}
+                    </span>
+                </td>
+                <td><a class="btn btn-primary" (click)="onEditTeam(entry)" role="button" 
+                        data-toggle="modal" 
+                        data-target="#editTeamModal">
+                        Edit
+                    </a>
+                </td>
+                <td><a class="btn btn-danger" (click)="onDeleteTeam(entry)" role="button">Delete</a></td>
+            </tr>
+            </tbody>
+    </table>
+
+    <div *ngIf="usersBool">
+        <users-edit #userModal (refresh)="renderTable()"></users-edit>
+    </div>
+
+    <div *ngIf="topicsBool">
+        <topics-edit #topicModal (refresh)="renderTable()"></topics-edit>
+    </div>
+
+    <div *ngIf="coursesBool">
+        <courses-edit #courseModal (refresh)="renderTable()"></courses-edit>
+    </div>
+
+    <!-- Edit team form -->
+    <generic-form *ngIf="teamsBool" [typeForm]="'teams'" 
+                                    [team]="selectedTeam" 
+                                    [action]="'edit'"
+                                    (refresh)="renderTable()"></generic-form>

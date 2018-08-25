@@ -1,0 +1,62 @@
+<app-site-navbar [showDropdown]="true" [currentRole]="'professor'"></app-site-navbar>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-md-12 group-component">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <blockquote>
+            <h1>{{group.course.name}}</h1>
+            <footer>{{group.period}}</footer>
+          </blockquote>
+        </div>
+      </div>
+      <hr/>
+
+      <tabs-static (tabSelected)="assignActiveTab($event);">
+        <tab-static tabTitle="Assignments">
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" class="btn btn-primary btn-assig" data-toggle="modal" data-target="#assignmentFormModal">
+                New Assignment
+              </button>
+              <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#createGroupFormModal">
+                Edit Group
+              </button>
+            </div>
+          </div>
+          <div *ngFor="let assignment of (group.assignments | sortAssignment)" class="panel-group" id="accordion" role="tablist"
+               aria-multiselectable="true">
+            <assignment [assignment]="assignment" (deleted)="refresh()" (edit)="loadEditForm($event)"></assignment>
+          </div> <!--Accordions-->
+        </tab-static>
+
+        <tab-static tabTitle="Teams">
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#teamCreateFormModal">
+                New team
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <generic-table #teamsTable [typetable]="'teams'" [groupID]="groupID"></generic-table>
+            </div>
+          </div>
+        </tab-static>
+      </tabs-static>
+    </div>
+
+    <!-- Add Team form -->
+    <app-team-form [groupId]="groupID" [studentsArr]="students" (refreshParent)=refresh()></app-team-form>
+
+    <!-- Add Assignment form -->
+    <assignment-form #assignmentModal [groupId]="group.id" [action]="'new'" (refreshParent)="refresh()"></assignment-form>
+
+    <!-- Edit group form -->
+    <generic-form [typeForm]="'groups'" [group]="group" [action]="'edit'"></generic-form>
+  </div>
+
+</div>

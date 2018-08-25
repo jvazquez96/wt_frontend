@@ -1,0 +1,28 @@
+<div class="chat">
+    <button class="btn btn-primary chatHeader" type="button" data-toggle="collapse" 
+            data-target="#chatBody" aria-expanded="false" 
+            aria-controls="chatBody"
+            (click)="changeButtonText()">
+        {{ buttonText }}
+    </button>
+    <div class="collapse" id="chatBody">
+        <div id="messagesBody"> 
+          <ul class="messagesList">
+            <li class="msg" *ngFor="let m of messages;">
+              {{m}}
+            </li>
+          </ul>
+        </div>
+        <div class="messageContainer">
+          <div class="typeMessage">
+            <input id="msgText" #msgVal type="text" 
+                    (keyup.enter)="sendMessage(msgVal.value)" 
+                    placeholder="Type message">
+            <button class="btn btn-success sendButton" 
+                    type="button" (click)="sendMessage(msgVal.value)">
+              Send
+            </button>
+          </div>
+        </div>
+    </div>     
+</div>

@@ -1,0 +1,41 @@
+<!-- Nav bar component -->
+
+<nav class="navbar nav-blue navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" (click)="navigateHome()">
+        <img alt="Brand" src="./assets/img/nav.png" style="max-width:50px; margin-top: -7px;">
+      </a>
+    </div>
+
+    <ul class="nav navbar-nav navbar-right">
+
+      <li *ngIf="currentRole == 'student'" class="dropdown">
+        <a href="/" class="dropdown-toggle top-option" data-toggle="dropdown" role="button" aria-haspopup="true"
+        aria-expanded="false"> {{selectedTeam}} <span class="caret"></span></a>
+        <ul class="dropdown-menu rest">
+          <li *ngFor="let team of userTeams; let i = index">
+            <a (click)="changeTeam(i)">{{team.name | capitalize}}</a>
+          </li>
+        </ul>
+      </li>
+
+      <li *ngIf="showDropdown" class="dropdown">
+        <a id="top-option" href="/" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+           aria-expanded="false"> {{currentRole | capitalize}} <span class="caret"></span></a>
+        <ul class="dropdown-menu rest">
+          <li><a (click)="navigateProfile()">Profile</a></li>
+          <li class="divider"></li>
+          <li *ngFor="let role of userRoles">
+            <a (click)="testFunc(role)">{{role | capitalize}}</a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="showDropdown"><a (click)="sendLogoutEvent()">Logout</a></li>
+
+    </ul>
+
+  </div>
+</nav>
+
+<!-- Nav bar component -->

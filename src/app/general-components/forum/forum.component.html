@@ -1,0 +1,80 @@
+<app-site-navbar [showDropdown]="true" [currentRole]="role"></app-site-navbar>
+
+<div class="margen-top90 margin-bottom20">
+  <div class="container">
+      <div class="row">
+        <div class="jumbotron">
+          <h1 class="display-4">{{ forum.name }}</h1>
+          <p class="lead">{{ forum.description }}</p>
+          <hr class="my-4">
+          <p>Author: {{ forum.author.first_name + ' ' + forum.author.last_name }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div align="right">
+          <button type="button" 
+                class="btn btn-warning" data-toggle="modal" 
+                data-target="#commentModal">
+              Reply
+          </button>
+        </div>
+      </div>
+      
+      <div class="comment">
+        <div class="row" *ngFor="let comment of comments; let i = index;">
+          <div class="row">
+            <div class="col-sm-2">
+              {{ comment.author.first_name + ' ' + comment.author.last_name }} 
+              <br>
+              {{ comment.author.enrollment }} 
+            </div>
+            <div class="col-sm-10">
+              <div class="row">
+                {{ comment.text }}
+              </div>
+              <div class="row">
+                <button class="btn btn-success" (click)="likeComment(comment.id, i)">
+                  <span octicon="thumbsup" width="24"></span> {{comment.likes}}
+                </button>
+                <button class="btn btn-danger" (click)="dislikeComment(comment.id, i)">
+                  <span octicon="thumbsdown" width="24"></span> {{comment.dislikes}}
+                </button>
+              </div>   
+            </div>
+          </div>
+          <hr *ngIf="i != comments.length - 1">
+        </div>
+      </div>
+    </div>
+</div>
+  
+<!-- New comment modal -->
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id=" commentModal">Comment</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="newComment">
+              <div class="form-group">
+                <label for="forumDesc" class="form-control-label">Comment:</label>
+                <textarea formControlName="commentText" rows="8" class="form-control validate" id="newComment"></textarea>
+              </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success" [disabled]="!newComment.valid" 
+                  (click)="newCommentSubmit()" data-dismiss="modal">
+            Add comment
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<app-chat *ngIf="role == 'student'"></app-chat>

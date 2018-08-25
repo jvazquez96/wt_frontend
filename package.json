@@ -1,0 +1,48 @@
+{
+  "name": "t247-app",
+  "version": "0.0.0",
+  "license": "MIT",
+  "angular-cli": {},
+  "scripts": {
+    "start": "node server.js",
+    "lint": "tslint \"src/**/*.ts\"",
+    "test": "ng test",
+    "pree2e": "webdriver-manager update",
+    "e2e": "protractor",
+    "postinstall": "ng build --aot --prod"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/cli": "^1.7.3",
+    "@angular/common": "^4.0.0",
+    "@angular/compiler": "^4.0.0",
+    "@angular/core": "^4.0.0",
+    "@angular/forms": "^4.0.0",
+    "@angular/http": "^4.0.0",
+    "@angular/platform-browser": "^4.0.0",
+    "@angular/platform-browser-dynamic": "^4.0.0",
+    "@angular/router": "^4.0.0",
+    "angular2-highlight-js": "^5.0.0",
+    "chart.js": "^2.7.2",
+    "express": "^4.16.3",
+    "moment-timezone": "^0.5.13",
+    "ng2-cache": "^0.1.10",
+    "ng2-charts": "^1.6.0",
+    "ng2-ckeditor": "1.1.6",
+    "ng2-codemirror": "^1.1.1",
+    "ng2-datepicker": "^1.8.3",
+    "octicons": "^7.1.0",
+    "path": "^0.12.7",
+    "socket.io-client": "^2.0.4",
+    "zone.js": "^0.8.20"
+  },
+  "devDependencies": {
+    "@angular/compiler-cli": "^4.0.0",
+    "typescript": "^2.0.0",
+    "@types/socket.io-client": "^1.4.32"
+  },
+  "engines": {
+    "node": "8.11.2",
+    "npm": "6.1.0"
+  }
+}

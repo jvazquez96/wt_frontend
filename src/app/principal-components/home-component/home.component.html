@@ -1,0 +1,46 @@
+<div class="container tabs-style" style="margin-top: 80px;">
+    <div class="content" [ngSwitch]="selectedRole">
+        <div class="row" *ngSwitchCase="'admin'">
+            <tabs>
+                <tab tabTitle="Users">
+                    <generic-table [typetable]="'users'"></generic-table>
+                </tab>
+                <tab tabTitle="Topics">
+                    <generic-table [typetable]="'topics'"></generic-table>
+                </tab>
+                <tab tabTitle="Courses">
+                    <generic-table [typetable]="'courses'"></generic-table>
+                </tab>
+                <tab tabTitle="Problems">
+                    <generic-table [typetable]="'problems'"></generic-table>
+                </tab>
+            </tabs>
+        </div>
+        <div class="row" *ngSwitchCase="'professor'">
+            <tabs >
+                <tab tabTitle="My Groups">
+                    <generic-table [typetable]="'groups'"></generic-table>
+                </tab>
+                <tab tabTitle="Topics">
+                    <generic-table [typetable]="'topics'"></generic-table>
+                </tab>
+                <tab tabTitle="Problems">
+                    <generic-table [typetable]="'problems'"></generic-table>
+                </tab>
+            </tabs>
+        </div>
+        <div class="row" *ngSwitchCase="'student'">
+            <tabs >
+                <tab *ngIf="typeOfUser == 'student'" tabTitle="My Assignments">
+                    <generic-table [typetable]="'assignments'"></generic-table>
+                </tab>
+                <tab tabTitle="Topics Dashboard">
+                    <app-topics-dashboard></app-topics-dashboard>
+                </tab>
+                <tab *ngIf="typeOfUser == 'student'"  tabTitle="Submissions">
+                    <generic-table [typetable]="'submissions'"></generic-table>
+                </tab>
+            </tabs>
+        </div>
+    </div>
+</div>

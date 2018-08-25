@@ -1,0 +1,16 @@
+<app-site-navbar [showDropdown]="true" [currentRole]="'student'"></app-site-navbar>
+
+<div class="container tabs-style margen-top">
+  <tabs-static (tabSelected)="assignActiveTab($event);">
+    <tab-static *ngFor="let id of problems; let i = index;" 
+                tabTitle="{{ i == 0 ? 'Main Problem' : 'Subproblem ' + (i) }}">
+        <submit-problem [problemId]="id" [type]="i" [members]="studentsID" 
+                        [submitParent]="parentReady" 
+                        (childSubmitted)="receiveMessage($event)"
+                        (submittedProblem)="checkIfParent($event)">
+        </submit-problem>
+    </tab-static>
+  </tabs-static>
+</div>  
+
+<app-chat></app-chat>

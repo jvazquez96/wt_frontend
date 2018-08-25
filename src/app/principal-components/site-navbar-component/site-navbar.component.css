@@ -1,0 +1,28 @@
+.navbar-brand{
+
+    font-family: Verdana;
+}
+
+.nav-blue {
+    background-color: #337ab7;
+}
+
+li a:hover {
+    background-color: #31b0d5;
+}
+
+#top-option:focus {
+    background-color: #31b0d5;
+}
+.top-option:focus {
+    background-color: #31b0d5;
+}
+
+li a {
+    color: white;
+}
+
+.rest li a {
+    color: black;
+}
+

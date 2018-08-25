@@ -1,0 +1,43 @@
+<app-site-navbar [showDropdown]="true" [currentRole]="'admin'"></app-site-navbar>
+
+<div class="container tabs-style">
+    <div class="content">
+        <div class="row">
+            <tabs [baseRoute]="'admin'" [selectedTab]="selectedTab">
+                <tab tabTitle="Users" tabName="users">
+                    <generic-table [typetable]="'users'"></generic-table>
+                </tab>
+                <tab tabTitle="Topics" tabName="topics">
+                    <generic-table [typetable]="'topics'"></generic-table>
+                </tab>
+                <tab tabTitle="Courses" tabName="courses">
+                    <generic-table [typetable]="'courses'"></generic-table>
+                </tab>
+                <tab tabTitle="Problems" tabName="problems">
+                    <generic-table [typetable]="'problems'"></generic-table>
+                </tab>
+                <tab tabTitle="Statistics" tabName="statistics">
+                    <app-generic-graph>
+                    </app-generic-graph>
+                </tab>
+                <tab tabTitle="Messages" tabName="messages">
+                    <app-teams-messages>
+                    </app-teams-messages>
+                </tab>
+                <tab tabTitle="Forums" tabName="forums">
+                    <app-forum-list [userRole]="userRole">
+                    </app-forum-list>
+                </tab>
+                <tab tabTitle="Comments" tabName="comments">
+                    <app-approve-comments>
+                    </app-approve-comments>
+                </tab>
+                <tab tabTitle="Contests" tabName="contests">
+                    <app-contest-list [userRole]="userRole">
+                    </app-contest-list>
+                </tab>
+            </tabs>
+        </div>
+    </div>
+</div>
+

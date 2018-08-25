@@ -1,0 +1,14 @@
+<app-site-navbar [showDropdown]="true" [currentRole]="''"></app-site-navbar>
+
+<div class="container">
+  <div class="create-problem__component">
+    
+    <tabs-static (tabSelected)="assignActiveTab($event);">
+      <tab-static *ngFor="let sub of subproblems; let i = index;" tabTitle="{{ 'Subproblem ' + (i + 1) }}">
+          <app-create-sub-problem [problemNo]="(i+1)" [mainName]="parentName" >
+          </app-create-sub-problem>
+      </tab-static>
+    </tabs-static>
+
+  </div>
+</div>

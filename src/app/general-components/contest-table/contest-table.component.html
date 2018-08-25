@@ -1,0 +1,27 @@
+<app-site-navbar [showDropdown]="true" [currentRole]="userRole"></app-site-navbar>
+
+<div class="container margen-top">
+  <h1>{{ contest.name }}</h1>
+
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th> Team </th>
+        <th *ngFor="let problem of contest.problems">{{problem.name}}</th>
+        <th> Score</th>
+        <th> Time </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let team of teams; let i = index">
+        <td>{{team.name}}</td>
+        <td *ngFor="let res of problemKeys; let j = index"> {{results[i][res]}} </td>
+        <td> 50 </td>
+        <td> 1:20:10 </td>
+      </tr>
+    </tbody>
+  
+  </table>
+</div>
+

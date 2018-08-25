@@ -1,0 +1,113 @@
+<div>
+  <h1>Forums</h1>
+</div>
+
+<div *ngIf="userRole != 'student'" class="container margin-bot">
+  <div class="row">
+    <button class="btn btn-primary create" 
+            type="button" 
+            data-target="#createForumModal"
+            data-toggle="modal">
+      Create Forum
+    </button>
+  </div>  
+</div>
+
+<div class="container">
+  <div class="row">
+      <div class="submit-code__feedback-card">
+        <feedback-card style="display:none;" #feedbackCard></feedback-card>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div *ngFor="let forum of forums; let i = index">
+      <div class="jumbotron">
+          <h3 class="display-4">{{ forum.name }}</h3>
+          <p class="lead">{{ forum.description }}</p>
+          <hr class="my-4">
+          <p>Author: {{ forum.author.first_name + ' ' + forum.author.last_name}}</p>
+          <button class="btn btn-primary" role="button" (click)="seeForum(forum.id)">
+            See Discussion
+          </button>
+          <button *ngIf="userRole != 'student'" type="button" 
+                  class="btn btn-warning" data-toggle="modal" 
+                  data-target="#forumModal"
+                  (click)="saveForumForEdit(forum)">
+            Edit
+          </button>
+          <button *ngIf="userRole != 'student'" 
+                  class="btn btn-danger" role="button" 
+                  (click)="deleteForum(forum.id, i)">
+            Delete
+          </button>
+      </div>
+  </div>
+</div>
+
+
+<!-- EDIT FORUM MODAL -->
+<div *ngIf="userRole != 'student'" class="modal fade" id="forumModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModal">Edit forum</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form [formGroup]="editForumForm">
+            <div class="form-group">
+              <label for="title" class="form-control-label">Title:</label>
+              <input formControlName="forumTitle" type="text" class="form-control validate" id="title">
+            </div>
+            <div class="form-group">
+              <label for="forumDesc" class="form-control-label">Description:</label>
+              <textarea formControlName="forumDesc" rows="8" class="form-control validate" id="forumDesc"></textarea>
+            </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" #closeEdit class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" [disabled]="!editForumForm.valid" class="btn btn-success"  (click)="editForum()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE FORUM MODAL -->
+<div *ngIf="userRole != 'student'" class="modal fade" id="createForumModal" tabindex="-1" role="dialog" aria-labelledby="createFModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createFModal">Create forum</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="createForumForm">
+              <div class="form-group">
+                <label for="titleC" class="form-control-label">Title:</label>
+                <input formControlName="forumTitle" type="text" class="form-control validate" id="titleC">
+              </div>
+              <div class="form-group">
+                <label for="forumDescC" class="form-control-label">Description:</label>
+                <textarea formControlName="forumDesc" rows="8" class="form-control validate" id="forumDescC"></textarea>
+              </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" #closeCreate class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" [disabled]="!createForumForm.valid" class="btn btn-success" (click)="createForum()" data-dismiss="modal">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

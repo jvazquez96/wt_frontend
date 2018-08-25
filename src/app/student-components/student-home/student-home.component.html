@@ -1,0 +1,29 @@
+<app-site-navbar [showDropdown]="true" [currentRole]="'student'"></app-site-navbar>
+
+<div class="container tabs-style">
+    <div class="content">
+        <div class="row">
+            <tabs [baseRoute]="'student'" [selectedTab]="selectedTab">
+                <tab *ngIf="isStudent" tabTitle="My Assignments" tabName="assignments">
+                    <generic-table [typetable]="'assignments'"></generic-table>
+                </tab>
+                <tab tabTitle="Topics Dashboard" tabName="topicsdashboard">
+                    <app-topics-dashboard [selectedTopic]="selectedTopic"></app-topics-dashboard>
+                </tab>
+                <tab *ngIf="isStudent" tabTitle="Submissions" tabName="submissions">
+                    <generic-table [typetable]="'submissions'"></generic-table>
+                </tab>
+                <tab tabTitle="Forums" tabName="forums">
+                    <app-forum-list [userRole]="userRole">
+                    </app-forum-list>
+                </tab>
+                <tab tabTitle="Contests" tabName="contests">
+                    <app-contest-list [userRole]="userRole">
+                    </app-contest-list>
+                </tab>
+            </tabs>
+        </div>
+    </div>
+</div>
+
+<app-chat></app-chat>

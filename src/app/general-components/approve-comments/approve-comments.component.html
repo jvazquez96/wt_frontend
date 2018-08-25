@@ -1,0 +1,40 @@
+<div class="container">
+  <h1>Approve Comments</h1>
+  <div *ngIf="forums.length && loadedForums" class="right">
+    <label for="_forum"></label>
+    <select [(ngModel)]="forumSelectedIndex" name="_forum" id="_forum" (change)="loadComments($event)">
+      <option *ngFor="let forum of forums; let i = index" [value]="i">
+        {{forum.name}}
+      </option>
+    </select>
+  </div>
+  <div *ngIf="forumSelected">
+    <h3>{{forumSelected.name}}</h3>
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Author</th>
+          <th>Date Posted</th>
+          <th>Comment</th>
+          <th>Approve/Delete</th>
+        </tr>
+      </thead>
+  
+      <tbody>
+        <tr *ngFor="let comment of comments; let i = index">
+          <td> {{ comment.author.enrollment + ' ' + comment.author.first_name + ' ' + comment.author.last_name}} </td>
+          <td> {{ comment.created | dateFilter }} </td>
+          <td> {{ comment.text }} </td>
+          <td> 
+            <button class="btn btn-success" (click)="approveComment(comment, i)" >Approve</button> 
+            <button class="btn btn-danger" (click)="deleteComment(comment, i)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    
+    </table>
+  </div>
+  <div *ngIf="!forums.length && loadedForums">
+    You have no forums
+  </div>
+</div>

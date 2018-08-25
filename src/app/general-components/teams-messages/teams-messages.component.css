@@ -1,0 +1,16 @@
+.noBullet {
+    list-style: none;
+}
+
+.messages {
+    overflow-y: scroll;
+    height: 500px;
+}
+
+.msg {
+    margin-bottom: 2px;
+}
+
+.date {
+    color: darkgrey;
+}
